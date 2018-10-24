@@ -1,3 +1,37 @@
-<p>
-  characters works!
-</p>
+<div class="container">
+  <div class="row padding-top">
+    <div class="col-12">
+      <label for="searchCharacter">Search by name:</label>
+      <div class="input-group">
+        <input type="text" id="searchCharacter" class="form-control" [(ngModel)]="searchInput">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="getCharactersByName()">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row padding-top">
+    <div class="col-12">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let char of characters">{{char.name}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row padding-top">
+    <div class="col-12">
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+
+          <li class="page-item" *ngIf="currentPage - 1 != 0"><a class="page-link" href="#">{{currentPage - 1}}</a></li>
+          <li class="page-item"><a class="page-link" href="#">{{currentPage}}</a></li>
+          <li class="page-item" *ngIf="currentPage + 1 != 10"><a class="page-link" href="#">{{currentPage + 1}}</a></li>
+
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<app-loader [isLoading]="isLoading"></app-loader>

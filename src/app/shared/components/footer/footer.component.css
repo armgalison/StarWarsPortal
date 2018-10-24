@@ -22,3 +22,5 @@
 .footer-navigator a:last-child { border-right: none; }
 .footer-navigator a:hover { background-color: rgba(0, 0, 0, .5); }
 .footer-navigator a:active { background-color: rgba(0, 0, 0, .6); }
+
+.footer-padding { padding-bottom: 66px; }
