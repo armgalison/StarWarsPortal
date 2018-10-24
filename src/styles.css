@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 html, body {
     background-color: #e9ecef;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .padding-top { padding-top: 20px; }
