@@ -32,30 +32,39 @@ export class CharactersComponent implements OnInit {
   }
 
   getCharactersByName() {
-    this.isLoading = true;
-    this.characterService.getCharactersByName('luke')
-    .subscribe(
-      characters => {
-        this.isLoading = false;
-        this.characters = characters;
-      }, error => {
-        this.isLoading = false;
-        console.log(error);
-      }
-    );
+    if (this.searchInput.length === 0) {
+      this.getCharacters();
+    } else {
+      this.isLoading = true;
+      this.characterService.getCharactersByName(this.searchInput)
+      .subscribe(
+        characters => {
+          this.isLoading = false;
+          this.characters = characters;
+        }, error => {
+          this.isLoading = false;
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  getCharacterId(urlString: string) {
+    return urlString.split('/')[5];
+  }
+
+  prevPage() {
+    this.currentPage--;
+    this.getCharacters();
+  }
+
+  nextPage() {
+    this.currentPage++;
+    this.getCharacters();
   }
 
   ngOnInit() {
     this.getCharacters();
   }
   
-
-  // this.characterService.getCharacterById(85)
-  // .subscribe(
-  //   character => {
-  //     console.log('By Id: ', character);
-  //   }, error => {
-  //     console.log(error);
-  //   }
-  // );
 }

@@ -26,7 +26,7 @@ export class CharacterService {
     .pipe(map(res => res['results'] )) as Observable<Character[]>;
   }
 
-  getCharacterById(id: number): Observable<Character> {
+  getCharacterById(id: string): Observable<Character> {
     return this.http.get(`${this.charactersUrl}${id}`) as Observable<Character>;
   }
 
