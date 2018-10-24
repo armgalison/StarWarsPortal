@@ -1,0 +1,14 @@
+.home-page {
+    display: flex;
+    align-items: center;
+}
+
+.home-page > .container {
+    padding-top: 30px;
+    min-height: calc(100vh - 132px);
+    /* background-color: rgba(0, 0, 0, .125); */
+}
+
+.custom-carousel img {
+    width: 100%;
+}

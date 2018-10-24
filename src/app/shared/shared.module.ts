@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   imports: [
@@ -8,8 +10,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule.forRoot()
   ],
   exports: [
-    NgbModule
+    NgbModule,
+    FooterComponent,
+    HeaderComponent
   ],
-  declarations: []
+  declarations: [FooterComponent, HeaderComponent]
 })
 export class SharedModule { }

@@ -1,0 +1,23 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.footer-navigator {
+    width: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    height: 66px;
+}
+
+.footer-navigator a {
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    line-height: 66px;
+    width: 100%;
+    border-right: 1px solid white;
+}
+.footer-navigator a:last-child { border-right: none; }
+.footer-navigator a:hover { background-color: rgba(0, 0, 0, .5); }
+.footer-navigator a:active { background-color: rgba(0, 0, 0, .6); }
