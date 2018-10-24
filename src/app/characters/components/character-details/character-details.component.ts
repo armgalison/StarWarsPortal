@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CharacterService } from '../../core/services/character.service';
-import { Character } from '../../core/models/character';
 import { ActivatedRoute } from '@angular/router';
+import { Character } from 'src/app/core/models/character';
+import { CharacterService } from 'src/app/core/services/character.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-character-details',
@@ -10,30 +11,31 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CharacterDetailsComponent implements OnInit {
 
-  isLoading: boolean;
   id: string;
   character: Character;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private characterService: CharacterService
+    private characterService: CharacterService,
+    private loaderService: LoaderService
   ) { }
 
   getCharacter() {
-    this.isLoading = true;
+    this.loaderService.show();
     this.characterService.getCharacterById(this.id)
     .subscribe(
       character => {
-        this.isLoading = false;
+        this.loaderService.hide();
         this.character = character;
       }, error => {
-        this.isLoading = false;
+        this.loaderService.hide();
         console.log(error);
       }
     );
   }
 
   ngOnInit() {
+    this.loaderService.show();
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.getCharacter();
   }

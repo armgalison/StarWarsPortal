@@ -1,0 +1,9 @@
+.full-fill {
+  height: calc(100vh - 66px);
+}
+.scroll {
+  overflow: auto;
+}
+.main-padding {
+  padding-bottom: 66px;
+}

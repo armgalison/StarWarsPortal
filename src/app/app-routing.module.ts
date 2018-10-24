@@ -4,12 +4,12 @@ import { StarshipsModule } from './starships/starships.module';
 import { CharactersModule } from './characters/characters.module';
 
 const routes: Routes = [
-    { path: 'starships', loadChildren: () => StarshipsModule },
-    { path: 'characters', loadChildren: () => CharactersModule }
+    { path: 'starships', loadChildren: './starships/starships.module#StarshipsModule' },
+    { path: 'characters', loadChildren: './characters/characters.module#CharactersModule' }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}

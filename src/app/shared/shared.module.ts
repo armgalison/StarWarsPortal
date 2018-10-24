@@ -4,7 +4,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { RouterModule } from '@angular/router';
-import { LoaderComponent } from './components/loader/loader.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
@@ -22,8 +21,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     FooterComponent,
     HeaderComponent,
-    LoaderComponent
   ],
-  declarations: [FooterComponent, HeaderComponent, LoaderComponent]
+  declarations: [FooterComponent, HeaderComponent ]
 })
 export class SharedModule { }

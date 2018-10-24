@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CharacterService } from '../core/services/character.service';
 import { Character } from '../core/models/character';
+import { LoaderService } from '../core/services/loader.service';
 
 @Component({
   selector: 'app-characters',
@@ -9,23 +10,25 @@ import { Character } from '../core/models/character';
 })
 export class CharactersComponent implements OnInit {
 
-  isLoading: boolean = false;
   pages: number = 9;
-  currentPage: number = 8;
+  currentPage: number = 1;
   searchInput: string;
   characters: Character[];
 
-  constructor(private characterService: CharacterService) { }
+  constructor(
+    private characterService: CharacterService,
+    private loaderService: LoaderService
+  ) { }
 
   getCharacters() {
-    this.isLoading = true;
+    this.loaderService.show();
     this.characterService.getCharacters(this.currentPage)
     .subscribe(
       characters => {
         this.characters = characters.sort((a, b) => a.name < b.name ? -1 : 1);
-        this.isLoading = false;
+        this.loaderService.hide();
       }, error => {
-        this.isLoading = false;
+        this.loaderService.hide();
         console.log(error);
       }
     );
@@ -35,14 +38,14 @@ export class CharactersComponent implements OnInit {
     if (this.searchInput.length === 0) {
       this.getCharacters();
     } else {
-      this.isLoading = true;
+      this.loaderService.show();
       this.characterService.getCharactersByName(this.searchInput)
       .subscribe(
         characters => {
-          this.isLoading = false;
+          this.loaderService.hide();
           this.characters = characters;
         }, error => {
-          this.isLoading = false;
+          this.loaderService.hide();
           console.log(error);
         }
       );
@@ -54,13 +57,17 @@ export class CharactersComponent implements OnInit {
   }
 
   prevPage() {
-    this.currentPage--;
-    this.getCharacters();
+    if (this.currentPage - 1 > 0) {
+      this.currentPage--;
+      this.getCharacters();
+    }
   }
 
   nextPage() {
-    this.currentPage++;
-    this.getCharacters();
+    if (this.currentPage + 1 < 10) {
+      this.currentPage++;
+      this.getCharacters();
+    }
   }
 
   ngOnInit() {
