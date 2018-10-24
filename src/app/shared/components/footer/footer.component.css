@@ -17,6 +17,7 @@
     line-height: 66px;
     width: 100%;
     border-right: 1px solid white;
+    cursor: pointer;
 }
 .footer-navigator a:last-child { border-right: none; }
 .footer-navigator a:hover { background-color: rgba(0, 0, 0, .5); }
