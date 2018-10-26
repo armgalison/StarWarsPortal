@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CharacterService } from '../core/services/character.service';
-import { Character } from '../core/models/character';
-import { LoaderService } from '../core/services/loader.service';
 import { trigger, transition, style, animate, query, stagger, animateChild } from '@angular/animations';
+import { Character } from '../../../core/models/character';
+import { CharacterService } from '../../../core/services/character.service';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
-  selector: 'app-characters',
-  templateUrl: './characters.component.html',
-  styleUrls: ['./characters.component.css'],
+  selector: 'app-characters-list',
+  templateUrl: './characters-list.component.html',
+  styleUrls: ['./characters-list.component.css'],
   animations: [
     trigger('items', [
       transition(':enter', [
@@ -18,7 +18,7 @@ import { trigger, transition, style, animate, query, stagger, animateChild } fro
     ])
   ]
 })
-export class CharactersComponent implements OnInit {
+export class CharactersListComponent implements OnInit {
 
   pages: number = 9;
   currentPage: number = 1;
@@ -81,6 +81,7 @@ export class CharactersComponent implements OnInit {
   }
 
   getCharacterId(urlString: string) {
+    console.log(`====> ${urlString.split('/')[5]}`)
     return urlString.split('/')[5];
   }
 
