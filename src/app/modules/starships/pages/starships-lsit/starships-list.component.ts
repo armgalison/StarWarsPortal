@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Starship } from '../../../core/models/starship';
-import { StarshipService } from '../../../core/services/starship.service';
-import { LoaderService } from '../../../core/services/loader.service';
+
+import { Starship } from 'src/app/core/models/starship';
+
+import { StarshipService } from 'src/app/core/services/starship.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 
 @Component({

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate, query, stagger, animateChild } from '@angular/animations';
-import { Character } from '../../../core/models/character';
-import { CharacterService } from '../../../core/services/character.service';
-import { LoaderService } from '../../../core/services/loader.service';
+
+import { Character } from 'src/app/core/models/character';
+
+import { CharacterService } from 'src/app/core/services/character.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
 
 @Component({
   selector: 'app-characters-list',

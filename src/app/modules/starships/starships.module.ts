@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
 
 import { StarshipsRoutingModule } from './starships-routing.module';
-import { SharedModule } from '../shared/shared.module';
-import { CommonModule } from '@angular/common';
 import { StarshipsListComponent } from './pages/starships-lsit/starships-list.component';
 import { StarshipDetailsComponent } from './pages/starship-details/starship-details.component';
 
