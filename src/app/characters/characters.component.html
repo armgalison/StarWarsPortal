@@ -10,13 +10,22 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-outline-secondary right-float margin-top" (click)="toggleSortCharacters()">
+        <img [hidden]="isSortedByAlphabet" src="assets/icons/sort-by-alphabet.png" alt="">
+        <img [hidden]="!isSortedByAlphabet" src="assets/icons/sort-reverse-alphabetical-order.png" alt="">
+      </button>
+    </div>
+  </div>
   <div class="row padding-top">
     <div class="col-12">
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let char of characters">
+        <li class="list-group-item" *ngFor="let char of characters" @items>
           {{char.name}}
-          <button class="btn btn-outline-secondary" style="float: right;" [routerLink]="getCharacterId(char.url)">Details</button>
+          <button class="btn btn-outline-secondary right-float" [routerLink]="getCharacterId(char.url)">Details</button>
         </li>
+        <li class="list-group-item" *ngIf="characters && characters.length == 0">Character not found!</li>
       </ul>
     </div>
   </div>

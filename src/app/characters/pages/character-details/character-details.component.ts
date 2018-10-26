@@ -48,6 +48,7 @@ export class CharacterDetailsComponent implements OnInit {
   }
 
   getCharacter(id: string) {
+    this.loaderService.show();
     this.getCharacterWithSpecies(id)
     .then(character => {
       this.character = character;
@@ -64,7 +65,6 @@ export class CharacterDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loaderService.show();
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.getCharacter(this.id);
   }

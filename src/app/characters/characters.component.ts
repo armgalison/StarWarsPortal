@@ -2,11 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { CharacterService } from '../core/services/character.service';
 import { Character } from '../core/models/character';
 import { LoaderService } from '../core/services/loader.service';
+import { trigger, transition, style, animate, query, stagger, animateChild } from '@angular/animations';
 
 @Component({
   selector: 'app-characters',
   templateUrl: './characters.component.html',
-  styleUrls: ['./characters.component.css']
+  styleUrls: ['./characters.component.css'],
+  animations: [
+    trigger('items', [
+      transition(':enter', [
+        style({ transform: 'scale(0.5)', opacity: 0 }),  // initial
+        animate('1s cubic-bezier(.8, -0.6, 0.2, 1.5)', 
+          style({ transform: 'scale(1)', opacity: 1 }))  // final
+      ]),
+    ])
+  ]
 })
 export class CharactersComponent implements OnInit {
 
@@ -14,18 +24,36 @@ export class CharactersComponent implements OnInit {
   currentPage: number = 1;
   searchInput: string;
   characters: Character[];
+  isSortedByAlphabet: boolean = true;
 
   constructor(
     private characterService: CharacterService,
     private loaderService: LoaderService
   ) { }
 
+  sortCharactersByAlphabet(characters: Character[]): Character[] {
+    return characters.sort((a, b) => a.name < b.name ? -1 : 1);
+  }
+
+  sortCharactersReverseAlphabetical(characters: Character[]): Character[] {
+    return characters.sort((a, b) => a.name < b.name ? 1 : -1);
+  }
+
+  toggleSortCharacters() {
+    if (this.isSortedByAlphabet) {
+      this.characters = this.sortCharactersReverseAlphabetical(this.characters);
+    } else {
+      this.characters = this.sortCharactersByAlphabet(this.characters);
+    }
+    this.isSortedByAlphabet = !this.isSortedByAlphabet;
+  }
+
   getCharacters() {
     this.loaderService.show();
     this.characterService.getCharacters(this.currentPage)
     .subscribe(
       characters => {
-        this.characters = characters.sort((a, b) => a.name < b.name ? -1 : 1);
+        this.characters = this.sortCharactersByAlphabet(characters);
         this.loaderService.hide();
       }, error => {
         this.loaderService.hide();

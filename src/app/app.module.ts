@@ -8,13 +8,15 @@ import { HomeModule } from './home/home.module';
 import { AppRoutingModule } from './app-routing.module';
 import { StarshipsModule } from './starships/starships.module';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
     AppComponent, 
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     CoreModule,
     SharedModule,
     HomeModule,
