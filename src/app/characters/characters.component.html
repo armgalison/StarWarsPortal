@@ -13,7 +13,10 @@
   <div class="row padding-top">
     <div class="col-12">
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let char of characters" [routerLink]="getCharacterId(char.url)">{{char.name}}</li>
+        <li class="list-group-item" *ngFor="let char of characters">
+          {{char.name}}
+          <button class="btn btn-outline-secondary" style="float: right;" [routerLink]="getCharacterId(char.url)">Details</button>
+        </li>
       </ul>
     </div>
   </div>

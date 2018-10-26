@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { CharactersRoutingModule } from './characters-routing.module';
 import { CharactersComponent } from './characters.component';
 import { SharedModule } from '../shared/shared.module';
-import { CharacterDetailsComponent } from './components/character-details/character-details.component';
+import { CharacterDetailsComponent } from './pages/character-details/character-details.component';
+import { SpecieModalComponent } from './components/specie-modal/specie-modal.component';
 
 @NgModule({
   imports: [
@@ -12,6 +13,6 @@ import { CharacterDetailsComponent } from './components/character-details/charac
     SharedModule,
     CharactersRoutingModule
   ],
-  declarations: [CharactersComponent, CharacterDetailsComponent]
+  declarations: [CharactersComponent, CharacterDetailsComponent, SpecieModalComponent]
 })
 export class CharactersModule { }

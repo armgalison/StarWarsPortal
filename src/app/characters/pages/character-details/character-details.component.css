@@ -1,0 +1,7 @@
+.specie-link {
+    cursor: pointer;
+}
+
+.specie-link:hover {
+    font-weight: 900;
+}

@@ -10,8 +10,16 @@
           <li class="list-group-item">Skin Color: {{character.skin_color}}</li>
           <li class="list-group-item">Birth Year: {{character.birth_year}}</li>
           <li class="list-group-item">Gender: {{character.gender}}</li>
+          <li class="list-group-item">
+            Species: &nbsp;
+            <i class="specie-link" *ngFor="let specie of character.species" (click)="openSpecieModal(specie)">
+              {{specie.name}}
+            </i>&nbsp;
+          </li>
         </ul>
       </div>
     </div>
   </div>
 </div>
+
+<app-specie-modal #specieModal></app-specie-modal>

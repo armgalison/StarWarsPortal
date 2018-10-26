@@ -9,7 +9,7 @@ export interface Character {
     mass: number;
     name: string;
     skin_color: string;
-    species: string[];
+    species: any[];
     starships: string[];
     url: string;
     vehicles: string;

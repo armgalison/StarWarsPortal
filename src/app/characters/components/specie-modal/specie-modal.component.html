@@ -1,0 +1,47 @@
+<ng-template #specieModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{specie.name}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body d-flex">
+      <ul class="list-group list-group-flush fill-width col-12 col-md-8 offset-md-2">
+          <li class="list-group-item">
+            Average Height:
+            <div class="right-float">{{specie.average_height}}</div>
+          </li>
+          <li class="list-group-item">
+            Average Lifespan:
+            <div class="right-float">{{specie.average_lifespan}}</div>
+          </li>
+          <li class="list-group-item">
+            Classification:
+            <div class="right-float">{{specie.classification}}</div>
+          </li>
+          <li class="list-group-item">
+            Designation:
+            <div class="right-float">{{specie.designation}}</div>
+          </li>
+          <li class="list-group-item">
+            Eye Colors:
+            <div class="right-float">{{specie.eye_colors}}</div>
+          </li>
+          <li class="list-group-item">
+            Hair Colors:
+            <div class="right-float">{{specie.hair_colors}}</div>
+          </li>
+          <li class="list-group-item">
+            Language:
+            <div class="right-float">{{specie.language}}</div>
+          </li>
+          <li class="list-group-item">
+            Skin Colors:
+            <div class="right-float">{{specie.skin_colors}}</div>
+          </li>
+      </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+  </div>
+</ng-template>
