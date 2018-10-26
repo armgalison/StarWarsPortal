@@ -1,3 +1,29 @@
-<p>
-  starship-details works!
-</p>
+<div class="character-details">
+    <div class="container" *ngIf="starship">
+      <div class="row">
+        <div class="col-12 padding-top center-align">
+          <h2>{{starship.name}}</h2>
+        </div>
+      </div>
+      <div class="row padding-top">
+        <div class="col-12">
+          <ul class="list-group">
+            <li class="list-group-item">Model: {{starship.model}}</li>
+            <li class="list-group-item">Manufacturer: {{starship.manufacturer}}</li>
+            <li class="list-group-item">Cost in Credits: {{starship.cost_in_credits}}</li>
+            <li class="list-group-item">Length: {{starship.length}}</li>
+            <li class="list-group-item">Max Atmosphering Speed: {{starship.max_atmosphering_speed}}</li>
+            <li class="list-group-item">Crew: {{starship.crew}}</li>
+            <li class="list-group-item">
+              Pilots: &nbsp;
+              <i class="pilot-link" *ngFor="let pilot of starship.pilots" [routerLink]="['/characters', getPilotIdFromUrl(pilot.url)]">
+                {{pilot.name}}
+              </i>
+              <i *ngIf="starship.pilots && starship.pilots.length === 0">n/a</i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  

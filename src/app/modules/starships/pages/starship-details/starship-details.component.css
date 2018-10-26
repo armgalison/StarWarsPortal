@@ -1,0 +1,9 @@
+.pilot-link {
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, .125);
+    margin-right: 5px;
+}
+
+.pilot-link:hover {
+    font-weight: 900;
+}
