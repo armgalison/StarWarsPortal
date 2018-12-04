@@ -1,47 +1,62 @@
-import { CharacterDetailsComponent } from "./character-details.component";
-import { ActivatedRoute } from "@angular/router";
-import { CharacterService } from "src/app/core/services/character.service";
-import { SpecieService } from "src/app/core/services/specie.service";
-import { LoaderService } from "src/app/core/services/loader.service";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { CharacterService } from 'src/app/core/services/character.service';
+import { LoaderService } from 'src/app/core/services/loader.service';
+import { SpecieService } from 'src/app/core/services/specie.service';
+
+import { CharacterDetailsComponent } from './character-details.component';
 import * as Observable from 'rxjs';
 import { Character } from 'src/app/core/models/character';
-import { Specie } from 'src/app/core/models/specie';
+import { HttpClientModule } from '@angular/common/http';
+
+class ActivatedRouteStub {
+    snapshot = {
+        paramMap: {
+            get: (key) => 'mockId'
+        }
+    }
+}
 
 describe('CharacterDetailsComponent', () => {
-    let activatedRoute = new ActivatedRoute();
-    let characterService = new CharacterService(null);
-    let specieService = new SpecieService(null);
-    let loaderService = new LoaderService();
-    let characterDetailsComponent: CharacterDetailsComponent;
+    let component: CharacterDetailsComponent;
+    let fixture: ComponentFixture<CharacterDetailsComponent>;
+    
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ HttpClientModule ],
+            declarations: [ CharacterDetailsComponent ],
+            schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+            providers: [ 
+                { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+                LoaderService,
+                SpecieService,
+                CharacterService
+            ]
+        });
 
-    beforeAll(() => {
-        characterDetailsComponent =
-            new CharacterDetailsComponent(
-                activatedRoute,
-                characterService,
-                specieService,
-                loaderService
-            );
+        fixture = TestBed.createComponent(CharacterDetailsComponent);
+        component = fixture.componentInstance;
     });
 
-    it('should get character populated with species', () => {
-        spyOn(characterService, 'getCharacterById').and.callFake(() => {
-            let character = {} as Character;
-            character.species = [ 'human' ];
-            return Observable.from([ character ]);
-        });
+    it('shuold create the compoent', () => {
+        expect(component).toBeTruthy();
+    });
 
-        spyOn(specieService, 'getSpecieById').and.callFake(() => {
-            let specie = {} as Specie;
-            specie.name = 'human';
-            specie.hair_colors = 'blue';
-            return Observable.from([ specie ]);
-        });
+    it('should get character populated with species', async () => {
+        let characterService = TestBed.get(CharacterService);
+        let specieService = TestBed.get(SpecieService);
 
-        characterDetailsComponent.ngOnInit();
-
-        expect(characterDetailsComponent.character).not.toBeNull();
-        expect(characterDetailsComponent.character).not.toBeUndefined();
+        spyOn(characterService, 'getCharacterById')
+            .and.returnValue(Observable.from([ { species: [ 'human' ] } as Character ]));
+        spyOn(specieService, 'getSpecieById')
+            .and.returnValue(Observable.from([ { name: 'human' } as Character ]));
+        fixture.detectChanges();
+            
+        await component.getCharacterWithSpecies(component.id);
+        expect(component.character).not.toBeNull();
+        expect(component.character).not.toBeUndefined();
+        expect(component.character.species.length).toBeGreaterThan(0);
     });
 
 
