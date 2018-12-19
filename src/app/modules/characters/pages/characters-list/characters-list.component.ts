@@ -1,10 +1,13 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { trigger, transition, style, animate, query, stagger, animateChild } from '@angular/animations';
-
+import { Store } from '@ngrx/store';
 import { Character } from 'src/app/core/models/character';
-
 import { CharacterService } from 'src/app/core/services/character.service';
 import { LoaderService } from 'src/app/core/services/loader.service';
+import { AppState } from 'src/app/reducers';
+import { GetCharacters } from '../../char.actions';
+import { noop } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-characters-list',
@@ -30,7 +33,8 @@ export class CharactersListComponent implements OnInit {
 
   constructor(
     private characterService: CharacterService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private store: Store<AppState>
   ) { }
 
   sortCharactersByAlphabet(characters: Character[]): Character[] {
@@ -52,16 +56,21 @@ export class CharactersListComponent implements OnInit {
 
   getCharacters() {
     this.loaderService.show();
+    const page = this.currentPage;
+
+    const handleError = (errorMessage: string) => {
+      this.loaderService.hide();
+      console.error(errorMessage);
+    }
+
     this.characterService.getCharacters(this.currentPage)
-    .subscribe(
-      characters => {
-        this.characters = this.sortCharactersByAlphabet(characters);
+    .pipe(
+      tap(characters => {
+        this.store.dispatch(new GetCharacters({ characters, page }));
         this.loaderService.hide();
-      }, error => {
-        this.loaderService.hide();
-        console.log(error);
-      }
-    );
+      })
+    )
+    .subscribe(noop, handleError);
   }
 
   getCharactersByName() {
@@ -83,7 +92,6 @@ export class CharactersListComponent implements OnInit {
   }
 
   getCharacterId(urlString: string) {
-    console.log(`====> ${urlString.split('/')[5]}`)
     return urlString.split('/')[5];
   }
 
@@ -103,6 +111,12 @@ export class CharactersListComponent implements OnInit {
 
   ngOnInit() {
     this.getCharacters();
+    this.store.pipe(
+      map(store => {
+        this.currentPage = store.characters.page;
+        this.characters = store.characters.characters;
+      })
+    ).subscribe();
   }
   
 }

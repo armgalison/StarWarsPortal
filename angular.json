@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "StarWarsPortal"
+  "defaultProject": "StarWarsPortal",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
