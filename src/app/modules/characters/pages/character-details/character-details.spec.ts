@@ -1,3 +1,5 @@
+
+import {from as observableFrom} from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -48,9 +50,9 @@ describe('CharacterDetailsComponent', () => {
         let specieService = TestBed.get(SpecieService);
 
         spyOn(characterService, 'getCharacterById')
-            .and.returnValue(Observable.from([ { species: [ 'human' ] } as Character ]));
+            .and.returnValue(observableFrom([ { species: [ 'human' ] } as Character ]));
         spyOn(specieService, 'getSpecieById')
-            .and.returnValue(Observable.from([ { name: 'human' } as Character ]));
+            .and.returnValue(observableFrom([ { name: 'human' } as Character ]));
         fixture.detectChanges();
 
         await component.getCharacterWithSpecies(component.id);
