@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules, Router } from '@angular/router';
 
 const routes: Routes = [
-    { path: '', loadChildren: './modules/home/home.module#HomeModule' },
-    { path: 'starships', loadChildren: './modules/starships/starships.module#StarshipsModule' },
-    { path: 'characters', loadChildren: './modules/characters/characters.module#CharactersModule' }
+    { path: '', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
+    { path: 'starships', loadChildren: () => import('./modules/starships/starships.module').then(m => m.StarshipsModule) },
+    { path: 'characters', loadChildren: () => import('./modules/characters/characters.module').then(m => m.CharactersModule) }
 ];
 
 @NgModule({

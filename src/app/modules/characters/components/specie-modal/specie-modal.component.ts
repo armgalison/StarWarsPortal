@@ -9,7 +9,7 @@ import { Specie } from 'src/app/core/models/specie';
 })
 export class SpecieModalComponent {
 
-  @ViewChild('specieModal') public specieModal;
+  @ViewChild('specieModal', { static: true }) public specieModal;
   public specie: Specie;
 
   constructor(private modalService: NgbModal) {}
