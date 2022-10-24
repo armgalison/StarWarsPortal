@@ -2,24 +2,23 @@
   <div class="container" *ngIf="character">
     <div class="row">
       <div class="col-12 padding-top center-align">
-        <h2>{{character.name}}</h2>
+        <h2>{{ character.name }}</h2>
       </div>
     </div>
     <div class="row padding-top">
       <div class="col-12">
         <ul class="list-group">
-          <!-- <li class="list-group-item">Name: {{character.name}}</li> -->
-          <li class="list-group-item">Eye Color: {{character.eye_color}}</li>
-          <li class="list-group-item">Mass: {{character.mass}}</li>
-          <li class="list-group-item">Hair Color: {{character.hair_color}}</li>
-          <li class="list-group-item">Skin Color: {{character.skin_color}}</li>
-          <li class="list-group-item">Birth Year: {{character.birth_year}}</li>
-          <li class="list-group-item">Gender: {{character.gender}}</li>
+          <li class="list-group-item">Eye Color: {{ character.eye_color }}</li>
+          <li class="list-group-item">Mass: {{ character.mass }}</li>
+          <li class="list-group-item">Hair Color: {{ character.hair_color }}</li>
+          <li class="list-group-item">Skin Color: {{ character.skin_color }}</li>
+          <li class="list-group-item">Birth Year: {{ character.birth_year }}</li>
+          <li class="list-group-item">Gender: {{ character.gender }}</li>
           <li class="list-group-item">
             Species: &nbsp;
-            <i class="specie-link" *ngFor="let specie of character.species" (click)="openSpecieModal(specie)">
-              {{specie.name}}
-            </i>&nbsp;
+            <em class="specie-link" *ngFor="let specie of character.species" (click)="openSpecieModal(specie)">
+              {{ specie.name }}
+            </em>&nbsp;
           </li>
         </ul>
       </div>

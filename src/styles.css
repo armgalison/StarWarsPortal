@@ -22,3 +22,6 @@ html, body {
 
 .nowrap { white-space: nowrap; }
 .fill-width { width: 100%; }
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon { cursor: pointer;}

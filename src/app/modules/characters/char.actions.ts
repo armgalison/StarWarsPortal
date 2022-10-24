@@ -7,22 +7,13 @@ export enum CharActionTypes {
 }
 
 export class GetCharacters implements Action {
-  readonly type = CharActionTypes.GetCharactersAction;
-
-  constructor(
-    public payload: {
-      characters: Character[], 
-      page: number
-    }
-  ) { }
+  public readonly type = CharActionTypes.GetCharactersAction;
+  constructor(public payload: { characters: Character[],  page: number }) {}
 }
 
 export class GetCharacterDetailAction implements Action {
-  readonly type = CharActionTypes.GetCharacterDetailAction;
-
-  constructor(public payload: {
-    character: Character
-  }) { }
+  public readonly type = CharActionTypes.GetCharacterDetailAction;
+  constructor(public payload: { character: Character }) { }
 }
 
 export type CharActions = GetCharacters | GetCharacterDetailAction;

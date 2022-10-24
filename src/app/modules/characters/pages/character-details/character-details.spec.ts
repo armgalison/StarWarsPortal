@@ -21,13 +21,13 @@ class ActivatedRouteStub {
 describe('CharacterDetailsComponent', () => {
     let component: CharacterDetailsComponent;
     let fixture: ComponentFixture<CharacterDetailsComponent>;
-    
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [ HttpClientModule ],
             declarations: [ CharacterDetailsComponent ],
             schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-            providers: [ 
+            providers: [
                 { provide: ActivatedRoute, useClass: ActivatedRouteStub },
                 LoaderService,
                 SpecieService,
@@ -52,7 +52,7 @@ describe('CharacterDetailsComponent', () => {
         spyOn(specieService, 'getSpecieById')
             .and.returnValue(Observable.from([ { name: 'human' } as Character ]));
         fixture.detectChanges();
-            
+
         await component.getCharacterWithSpecies(component.id);
         expect(component.character).not.toBeNull();
         expect(component.character).not.toBeUndefined();

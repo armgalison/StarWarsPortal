@@ -1,13 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { Character } from '@models/character';
 import { Store } from '@ngrx/store';
-import { Character } from 'src/app/core/models/character';
-import { CharacterService } from 'src/app/core/services/character.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
+import { CharacterService } from '@services/character.service';
+import { LoaderService } from '@services/loader.service';
+import { noop } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { AppState } from 'src/app/reducers';
 import { GetCharacters } from '../../char.actions';
-import { noop } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-characters-list',
@@ -16,20 +16,20 @@ import { tap, map } from 'rxjs/operators';
   animations: [
     trigger('items', [
       transition(':enter', [
-        style({ transform: 'scale(0.5)', opacity: 0 }),  // initial
-        animate('1s cubic-bezier(.8, -0.6, 0.2, 1.5)', 
-          style({ transform: 'scale(1)', opacity: 1 }))  // final
+        style({ transform: 'scale(0.5)', opacity: 0 }),
+        animate('1s cubic-bezier(.8, -0.6, 0.2, 1.5)',
+        style({ transform: 'scale(1)', opacity: 1 }))
       ]),
     ])
   ]
 })
 export class CharactersListComponent implements OnInit {
 
-  pages: number = 9;
-  currentPage: number = 1;
-  searchInput: string;
-  characters: Character[];
-  isSortedByAlphabet: boolean = true;
+  public characters: Character[];
+  public currentPage: number = 1;
+  public isSortedByAlphabet: boolean = true;
+  public pages: number = 9;
+  public searchInput: string;
 
   constructor(
     private characterService: CharacterService,
@@ -37,20 +37,10 @@ export class CharactersListComponent implements OnInit {
     private store: Store<AppState>
   ) { }
 
-  sortCharactersByAlphabet(characters: Character[]): Character[] {
-    return characters.sort((a, b) => a.name < b.name ? -1 : 1);
-  }
-
-  sortCharactersReverseAlphabetical(characters: Character[]): Character[] {
-    return characters.sort((a, b) => a.name < b.name ? 1 : -1);
-  }
-
-  toggleSortCharacters() {
-    if (this.isSortedByAlphabet) {
-      this.characters = this.sortCharactersReverseAlphabetical(this.characters);
-    } else {
-      this.characters = this.sortCharactersByAlphabet(this.characters);
-    }
+  public toggleSortCharacters(): void {
+    this.characters = this.isSortedByAlphabet
+      ? this.sortCharactersReverseAlphabetical(this.characters)
+      : this.sortCharactersByAlphabet(this.characters);
     this.isSortedByAlphabet = !this.isSortedByAlphabet;
   }
 
@@ -63,14 +53,12 @@ export class CharactersListComponent implements OnInit {
       console.error(errorMessage);
     }
 
-    this.characterService.getCharacters(this.currentPage)
-    .pipe(
+    this.characterService.getCharacters(this.currentPage).pipe(
       tap(characters => {
         this.store.dispatch(new GetCharacters({ characters, page }));
         this.loaderService.hide();
       })
-    )
-    .subscribe(noop, handleError);
+    ).subscribe(noop, handleError);
   }
 
   getCharactersByName() {
@@ -79,15 +67,15 @@ export class CharactersListComponent implements OnInit {
     } else {
       this.loaderService.show();
       this.characterService.getCharactersByName(this.searchInput)
-      .subscribe(
-        characters => {
-          this.loaderService.hide();
-          this.characters = characters;
-        }, error => {
-          this.loaderService.hide();
-          console.log(error);
-        }
-      );
+        .subscribe(
+          characters => {
+            this.loaderService.hide();
+            this.characters = characters;
+          }, error => {
+            this.loaderService.hide();
+            console.log(error);
+          }
+        );
     }
   }
 
@@ -118,5 +106,13 @@ export class CharactersListComponent implements OnInit {
       })
     ).subscribe();
   }
-  
+
+  private sortCharactersByAlphabet(characters: Character[]): Character[] {
+    return characters.sort((a, b) => a.name < b.name ? -1 : 1);
+  }
+
+  private sortCharactersReverseAlphabetical(characters: Character[]): Character[] {
+    return characters.sort((a, b) => a.name < b.name ? 1 : -1);
+  }
+
 }

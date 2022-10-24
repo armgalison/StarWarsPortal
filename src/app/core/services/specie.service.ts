@@ -1,17 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, pipe } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 import { Specie } from '../models/specie';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class SpecieService {
 
-  private speciesUrl = 'https://swapi.co/api/species/';
+  private speciesUrl = `${environment.apiUrl}/api/species/`;
 
   constructor(private http: HttpClient) { }
 

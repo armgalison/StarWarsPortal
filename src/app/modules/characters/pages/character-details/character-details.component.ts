@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Character } from 'src/app/core/models/character';
-import { Specie } from 'src/app/core/models/specie';
+import { Character } from '../../../../core/models/character';
+import { Specie } from '../../../../core/models/specie';
 
-import { CharacterService } from 'src/app/core/services/character.service';
-import { LoaderService } from 'src/app/core/services/loader.service'
-import { SpecieService } from 'src/app/core/services/specie.service';
+import { CharacterService } from '../../../../core/services/character.service';
+import { LoaderService } from '../../../../core/services/loader.service'
+import { SpecieService } from '../../../../core/services/specie.service';
 ;
 import { SpecieModalComponent } from '../../components/specie-modal/specie-modal.component';
 
@@ -17,10 +17,10 @@ import { SpecieModalComponent } from '../../components/specie-modal/specie-modal
 })
 export class CharacterDetailsComponent implements OnInit {
 
-  @ViewChild('specieModal') specieModal: SpecieModalComponent;
+  @ViewChild('specieModal') public specieModal: SpecieModalComponent;
 
-  id: string;
-  character: Character;
+  public character: Character;
+  public id: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -29,45 +29,40 @@ export class CharacterDetailsComponent implements OnInit {
     private loaderService: LoaderService
   ) { }
 
-  getSpecieIdFromUrl(url: string) {
-    return url.split('/')[5];
+  public async getCharacterWithSpecies(id: string): Promise<Character> {
+    const character = await this.characterService.getCharacterById(id).toPromise();
+    const species = await this.getSpeciesFromUrls(character.species);
+    return { ...character, species };
   }
 
-  async getSpeciesFromUrls(urls: string[]) {
-    const promiseArray = [];
-    urls.forEach(url => {
-      promiseArray.push(this.specieService.getSpecieById(this.getSpecieIdFromUrl(url)).toPromise());
-    });
-    return await Promise.all(promiseArray);
-  }
-
-  async getCharacterWithSpecies(id: string) {
-    let character: Character;
-    character = await this.characterService.getCharacterById(id).toPromise();
-    character.species = await this.getSpeciesFromUrls(character.species);
-    return character;
-  }
-
-  getCharacter(id: string) {
-    this.loaderService.show();
-    this.getCharacterWithSpecies(id)
-    .then(character => {
-      this.character = character;
-      this.loaderService.hide();
-    })
-    .catch(error => {
+  public async getCharacter(id: string): Promise<void> {
+    try {
+      this.loaderService.show();
+      this.character = await this.getCharacterWithSpecies(id);
+    } catch (error) {
       console.error(error);
+    } finally {
       this.loaderService.hide();
-    });
+    }
   }
 
-  openSpecieModal(specie: Specie) {
+  public ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.getCharacter(this.id);
+  }
+
+  public openSpecieModal(specie: Specie) {
     this.specieModal.open(specie);
   }
 
-  ngOnInit() {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getCharacter(this.id);
+  private async getSpeciesFromUrls(urls: string[] = []): Promise<Specie[]> {
+    const speciesIds = urls.map(this.getSpecieIdFromUrl);
+    const promiseArray = speciesIds.map(specieId => this.specieService.getSpecieById(specieId).toPromise());
+    return Promise.all(promiseArray);
+  }
+
+  private getSpecieIdFromUrl(url: string) {
+    return url.split('/')[5];
   }
 
 }

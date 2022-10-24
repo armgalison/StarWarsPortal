@@ -1,15 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, pipe } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { Starship } from '../models/starship';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class StarshipService {
 
-  private starshipUrl = 'https://swapi.co/api/starships/';
+  private starshipUrl = `${environment.apiUrl}/api/starships/`;
 
   constructor(private http: HttpClient) { }
 

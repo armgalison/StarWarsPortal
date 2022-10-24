@@ -14,6 +14,10 @@ import { SpecieModalComponent } from './components/specie-modal/specie-modal.com
     SharedModule,
     CharactersRoutingModule
   ],
-  declarations: [CharactersListComponent , CharacterDetailsComponent, SpecieModalComponent]
+  declarations: [
+    CharactersListComponent,
+    CharacterDetailsComponent,
+    SpecieModalComponent
+  ]
 })
 export class CharactersModule { }

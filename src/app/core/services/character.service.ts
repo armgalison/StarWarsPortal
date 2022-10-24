@@ -1,16 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, pipe } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 import { Character } from '../models/character';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CharacterService {
 
-  private charactersUrl = 'https://swapi.co/api/people/';
+  private charactersUrl = `${environment.apiUrl}/api/people/`;
 
   constructor(private http: HttpClient) { }
 

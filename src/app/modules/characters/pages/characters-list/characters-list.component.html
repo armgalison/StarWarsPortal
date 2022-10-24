@@ -22,7 +22,7 @@
     <div class="col-12">
       <ul class="list-group">
         <li class="list-group-item" *ngFor="let char of characters" @items>
-          {{char.name}}
+          {{ char.name }}
           <button class="btn btn-outline-secondary right-float" [routerLink]="['/characters', getCharacterId(char.url)]">
             Details
           </button>

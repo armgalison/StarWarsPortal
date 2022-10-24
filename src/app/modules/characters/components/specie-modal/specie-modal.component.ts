@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Specie } from 'src/app/core/models/specie';
 
@@ -7,20 +7,15 @@ import { Specie } from 'src/app/core/models/specie';
   templateUrl: './specie-modal.component.html',
   styleUrls: ['./specie-modal.component.css']
 })
-export class SpecieModalComponent implements OnInit {
+export class SpecieModalComponent {
 
-  @ViewChild('specieModal') specieModal;
-
-  specie: Specie;
+  @ViewChild('specieModal') public specieModal;
+  public specie: Specie;
 
   constructor(private modalService: NgbModal) {}
 
-  open(specie: Specie) {
+  public open(specie: Specie) {
     this.specie = specie;
     this.modalService.open(this.specieModal, { size: 'lg' });
   }
-
-  ngOnInit() {
-  }
-
 }

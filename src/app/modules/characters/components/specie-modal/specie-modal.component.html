@@ -1,37 +1,45 @@
 <ng-template #specieModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{specie.name}}</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{ specie.name }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body d-flex">
-      <ul class="list-group list-group-flush fill-width ">
-          <li class="list-group-item">
-            <b>Average Height:</b> {{specie.average_height}}
-          </li>
-          <li class="list-group-item">
-            <b>Average Lifespan:</b> {{specie.average_lifespan}}
-          </li>
-          <li class="list-group-item">
-            <b>Classification:</b> {{specie.classification}}
-          </li>
-          <li class="list-group-item">
-            <b>Designation:</b> {{specie.designation}}
-          </li>
-          <li class="list-group-item">
-            <b>Eye Colors:</b> {{specie.eye_colors}}
-          </li>
-          <li class="list-group-item">
-            <b>Hair Colors:</b> {{specie.hair_colors}}
-          </li>
-          <li class="list-group-item">
-            <b>Language:</b> {{specie.language}}
-          </li>
-          <li class="list-group-item">
-            <b>Skin Colors:</b> {{specie.skin_colors}}
-          </li>
-      </ul>
+    <ul class="list-group list-group-flush fill-width ">
+      <li class="list-group-item">
+        <strong>Average Height:</strong>
+        {{ specie.average_height }}
+      </li>
+      <li class="list-group-item">
+        <strong>Average Lifespan:</strong>
+        {{ specie.average_lifespan }}
+      </li>
+      <li class="list-group-item">
+        <strong>Classification:</strong>
+        {{ specie.classification }}
+      </li>
+      <li class="list-group-item">
+        <strong>Designation:</strong>
+        {{ specie.designation }}
+      </li>
+      <li class="list-group-item">
+        <strong>Eye Colors:</strong>
+        {{ specie.eye_colors }}
+      </li>
+      <li class="list-group-item">
+        <strong>Hair Colors:</strong>
+        {{ specie.hair_colors }}
+      </li>
+      <li class="list-group-item">
+        <strong>Language:</strong>
+        {{ specie.language }}
+      </li>
+      <li class="list-group-item">
+        <strong>Skin Colors:</strong>
+        {{ specie.skin_colors }}
+      </li>
+    </ul>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>

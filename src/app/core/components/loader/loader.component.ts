@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { LoaderState } from '@models/loader-state';
+import { LoaderService } from '@services/loader.service';
 import { Subscription } from 'rxjs';
-import { LoaderService } from '../../../core/services/loader.service';
-import { LoaderState } from '../../models/loader-state';
 
 @Component({
   selector: 'app-loader',
@@ -10,23 +10,22 @@ import { LoaderState } from '../../models/loader-state';
 })
 export class LoaderComponent implements OnInit, OnDestroy {
 
-  isLoading = false;
+  public isLoading = false;
 
   private subscription: Subscription;
 
-  constructor(
-    private loarderService: LoaderService
-  ) { }
+  constructor(private loarderService: LoaderService) { }
 
-  ngOnInit() {
-    this.subscription = this.loarderService.loaderState
-      .subscribe((state: LoaderState) => {
-        this.isLoading = state.show;
-      });
+  public ngOnInit() {
+    this.subscription = this.loarderService.loaderState.subscribe(this.setLoadingStatus.bind(this));
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  private setLoadingStatus(state: LoaderState) {
+    this.isLoading = !!state.show;
   }
 
 }
