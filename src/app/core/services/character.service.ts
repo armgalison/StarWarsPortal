@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { Character } from '../models/character';
@@ -13,21 +13,12 @@ export class CharacterService {
 
   constructor(private http: HttpClient) { }
 
-  getCharacters(page: number = 1): Observable<Character[]> {
-    return this.http.get(`${this.charactersUrl}?page=${page}`)
-    .pipe(map(res => {
-      return res['results']
-    })) as Observable<Character[]>;
-  }
-
-  getCharactersByName(name: string): Observable<Character[]> {
-    return this.http.get(`${this.charactersUrl}?search=${name}`)
-    .pipe(map(res => res['results'] )) as Observable<Character[]>;
+  public getCharacters(params: any): Observable<Pagination<Character>> {
+    return this.http.get<Pagination<Character>>(`${this.charactersUrl}`, { params });
   }
 
   getCharacterById(id: string): Observable<Character> {
     return this.http.get(`${this.charactersUrl}${id}`) as Observable<Character>;
   }
-
 
 }

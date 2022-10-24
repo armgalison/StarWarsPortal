@@ -1,4 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Character } from '@models/character';
 import { CharacterService } from '@services/character.service';
@@ -21,11 +22,11 @@ import { map } from 'rxjs/operators';
 })
 export class CharactersListComponent implements OnInit {
 
+  public count: number;
   public characters: Character[];
   public currentPage: number = 1;
   public isSortedByAlphabet: boolean = true;
-  public pages: number = 9;
-  public searchInput: string;
+  public searchInput: string = '';
 
   constructor(
     private characterService: CharacterService,
@@ -39,56 +40,26 @@ export class CharactersListComponent implements OnInit {
     this.isSortedByAlphabet = !this.isSortedByAlphabet;
   }
 
-  getCharacters() {
-    this.loaderService.show();
-
-    const handleError = (errorMessage: string) => {
-      console.error(errorMessage);
-    };
-
-    const handleSuccess = (characters: Character[]) => {
-      this.characters = characters;
-    };
-
-    this.characterService.getCharacters(this.currentPage)
-      .subscribe(handleSuccess, handleError, () => this.loaderService.hide());
+  public async getCharacters(page = 1): Promise<void> {
+    try {
+      this.loaderService.show();
+      const { count, results } = await this.characterService.getCharacters({ page, search: this.searchInput }).toPromise();
+      this.currentPage = page;
+      this.count = count;
+      this.characters = results;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loaderService.hide();
+    }
   }
 
-  getCharactersByName() {
-    if (this.searchInput.length === 0) {
-      this.getCharacters();
-      return;
-    }
+  public onChangePage(page: number): void {
 
-    this.loaderService.show();
-    this.characterService.getCharactersByName(this.searchInput)
-      .subscribe(
-        characters => {
-          this.loaderService.hide();
-          this.characters = characters;
-        }, error => {
-          this.loaderService.hide();
-          console.log(error);
-        }
-      );
   }
 
   getCharacterId(urlString: string) {
     return urlString.split('/')[5];
-  }
-
-  prevPage() {
-    if (this.currentPage - 1 > 0) {
-      this.currentPage--;
-      this.getCharacters();
-    }
-  }
-
-  nextPage() {
-    if (this.currentPage + 1 < 10) {
-      this.currentPage++;
-      this.getCharacters();
-    }
   }
 
   ngOnInit() {
