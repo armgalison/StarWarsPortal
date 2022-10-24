@@ -1,13 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Character } from '@models/character';
-import { Store } from '@ngrx/store';
 import { CharacterService } from '@services/character.service';
 import { LoaderService } from '@services/loader.service';
-import { noop } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { AppState } from 'src/app/reducers';
-import { GetCharacters } from '../../char.actions';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-characters-list',
@@ -34,7 +30,6 @@ export class CharactersListComponent implements OnInit {
   constructor(
     private characterService: CharacterService,
     private loaderService: LoaderService,
-    private store: Store<AppState>
   ) { }
 
   public toggleSortCharacters(): void {
@@ -46,37 +41,36 @@ export class CharactersListComponent implements OnInit {
 
   getCharacters() {
     this.loaderService.show();
-    const page = this.currentPage;
 
     const handleError = (errorMessage: string) => {
-      this.loaderService.hide();
       console.error(errorMessage);
-    }
+    };
 
-    this.characterService.getCharacters(this.currentPage).pipe(
-      tap(characters => {
-        this.store.dispatch(new GetCharacters({ characters, page }));
-        this.loaderService.hide();
-      })
-    ).subscribe(noop, handleError);
+    const handleSuccess = (characters: Character[]) => {
+      this.characters = characters;
+    };
+
+    this.characterService.getCharacters(this.currentPage)
+      .subscribe(handleSuccess, handleError, () => this.loaderService.hide());
   }
 
   getCharactersByName() {
     if (this.searchInput.length === 0) {
       this.getCharacters();
-    } else {
-      this.loaderService.show();
-      this.characterService.getCharactersByName(this.searchInput)
-        .subscribe(
-          characters => {
-            this.loaderService.hide();
-            this.characters = characters;
-          }, error => {
-            this.loaderService.hide();
-            console.log(error);
-          }
-        );
+      return;
     }
+
+    this.loaderService.show();
+    this.characterService.getCharactersByName(this.searchInput)
+      .subscribe(
+        characters => {
+          this.loaderService.hide();
+          this.characters = characters;
+        }, error => {
+          this.loaderService.hide();
+          console.log(error);
+        }
+      );
   }
 
   getCharacterId(urlString: string) {
@@ -99,12 +93,6 @@ export class CharactersListComponent implements OnInit {
 
   ngOnInit() {
     this.getCharacters();
-    this.store.pipe(
-      map(store => {
-        this.currentPage = store.characters.page;
-        this.characters = store.characters.characters;
-      })
-    ).subscribe();
   }
 
   private sortCharactersByAlphabet(characters: Character[]): Character[] {
