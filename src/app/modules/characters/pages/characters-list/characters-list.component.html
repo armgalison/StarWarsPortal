@@ -32,20 +32,16 @@
     </div>
   </div>
   <div class="row padding-top">
-    <div class="col-12">
-      <nav>
-        <ul class="pagination justify-content-center">
-          <ngb-pagination
-            [boundaryLinks]="true"
-            [collectionSize]="count"
-            [maxSize]="5"
-            [rotate]="true"
-            [ellipses]="false"
-            [page]="currentPage"
-            (pageChange)="getCharacters($event)">
-          </ngb-pagination>
-        </ul>
-      </nav>
+    <div class="col-12 d-flex justify-content-center">
+      <ngb-pagination
+        [boundaryLinks]="true"
+        [collectionSize]="count"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [page]="currentPage"
+        (pageChange)="getCharacters($event)">
+      </ngb-pagination>
     </div>
   </div>
 </div>

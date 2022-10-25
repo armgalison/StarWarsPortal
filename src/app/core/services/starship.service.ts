@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@environments/environment';
 import { Pagination } from '@models/pagination';
+import { Starship } from '@models/starship';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Starship } from '../models/starship';
 
 @Injectable({ providedIn: 'root' })
 export class StarshipService {

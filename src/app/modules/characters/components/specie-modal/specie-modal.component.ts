@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
+import { Specie } from '@models/specie';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Specie } from 'src/app/core/models/specie';
 
 @Component({
   selector: 'app-specie-modal',
