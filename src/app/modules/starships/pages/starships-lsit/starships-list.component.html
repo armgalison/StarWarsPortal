@@ -3,9 +3,9 @@
     <div class="col-12">
       <label for="searchStarships">Search by name:</label>
       <div class="input-group">
-        <input type="text" id="searchStarships" class="form-control" [(ngModel)]="searchInput" (keyup.enter)="getStarshipsByName()">
+        <input type="text" id="searchStarships" class="form-control" [(ngModel)]="searchInput" (keyup.enter)="getStarships()">
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" (click)="getStarshipsByName()">Search</button>
+          <button class="btn btn-outline-secondary" (click)="getStarships()">Search</button>
         </div>
       </div>
     </div>
@@ -31,25 +31,16 @@
   <div class="row padding-top">
     <div class="col-12">
       <nav>
-        <ul class="pagination justify-content-center">
-          <li class="page-item">
-            <a class="page-link" (click)="prevPage()">Previous</a>
-          </li>
-          <li class="page-item" *ngIf="currentPage - 1 != 0">
-            <a class="page-link" (click)="prevPage()">{{currentPage - 1}}</a>
-          </li>
-          <li class="page-item active">
-            <a class="page-link">{{currentPage}}</a>
-          </li>
-          <li class="page-item" *ngIf="currentPage + 1 != 10">
-              <a class="page-link" (click)="nextPage()">{{currentPage + 1}}</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" (click)="nextPage()">Next</a>
-          </li>
-        </ul>
+        <ngb-pagination
+          [boundaryLinks]="true"
+          [collectionSize]="count"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="false"
+          [page]="currentPage"
+          (pageChange)="getStarships($event)">
+        </ngb-pagination>
       </nav>
     </div>
   </div>
 </div>
-  

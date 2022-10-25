@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Character } from '../../../../core/models/character';
-import { Specie } from '../../../../core/models/specie';
+import { Character } from '@models/character';
+import { Specie } from '@models/specie';
 
-import { CharacterService } from '../../../../core/services/character.service';
-import { LoaderService } from '../../../../core/services/loader.service'
-import { SpecieService } from '../../../../core/services/specie.service';
-;
+import { CharacterService } from '@services/character.service';
+import { LoaderService } from '@services/loader.service';
+import { SpecieService } from '@services/specie.service';
+
 import { SpecieModalComponent } from '../../components/specie-modal/specie-modal.component';
 
 @Component({

@@ -17,8 +17,8 @@ export class CharacterService {
     return this.http.get<Pagination<Character>>(`${this.charactersUrl}`, { params });
   }
 
-  getCharacterById(id: string): Observable<Character> {
-    return this.http.get(`${this.charactersUrl}${id}`) as Observable<Character>;
+  public getCharacterById(id: string): Observable<Character> {
+    return this.http.get<Character>(`${this.charactersUrl}${id}`);
   }
 
 }

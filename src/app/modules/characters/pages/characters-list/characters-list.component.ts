@@ -1,10 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Character } from '@models/character';
 import { CharacterService } from '@services/character.service';
 import { LoaderService } from '@services/loader.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-characters-list',
@@ -54,15 +52,11 @@ export class CharactersListComponent implements OnInit {
     }
   }
 
-  public onChangePage(page: number): void {
-
-  }
-
-  getCharacterId(urlString: string) {
+  public getCharacterId(urlString: string): string {
     return urlString.split('/')[5];
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.getCharacters();
   }
 

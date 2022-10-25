@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Starship } from 'src/app/core/models/starship';
-
-import { StarshipService } from 'src/app/core/services/starship.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
-
+import { Starship } from '@models/starship';
+import { LoaderService } from '@services/loader.service';
+import { StarshipService } from '@services/starship.service';
 
 @Component({
   selector: 'app-starships-list',
@@ -13,86 +10,52 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 })
 export class StarshipsListComponent implements OnInit {
 
-  pages: number = 9;
-  currentPage: number = 1;
-  searchInput: string;
-  starships: Starship[];
-  isSortedByAlphabet: boolean = true;
+  public currentPage: number = 1;
+  public searchInput: string = '';
+  public starships: Starship[];
+  public isSortedByAlphabet: boolean = true;
+  public count: number;
 
   constructor(
     private starshipService: StarshipService,
     private loaderService: LoaderService
   ) { }
 
-  sortStarshipsByAlphabet(starships: Starship[]): Starship[] {
-    return starships.sort((a, b) => a.name < b.name ? -1 : 1);
-  }
-
-  sortStarshipsReverseAlphabetical(starships: Starship[]): Starship[] {
-    return starships.sort((a, b) => a.name < b.name ? 1 : -1);
-  }
-
-  toggleSortStarships() {
-    if (this.isSortedByAlphabet) {
-      this.starships = this.sortStarshipsReverseAlphabetical(this.starships);
-    } else {
-      this.starships = this.sortStarshipsByAlphabet(this.starships);
-    }
-    this.isSortedByAlphabet = !this.isSortedByAlphabet;
-  }
-
-  getStarships() {
-    this.loaderService.show();
-    this.starshipService.getStartships(this.currentPage)
-    .subscribe(
-      starships => {
-        this.starships = this.sortStarshipsByAlphabet(starships);
-        this.loaderService.hide();
-      }, error => {
-        console.error(error);
-        this.loaderService.hide();
-      }
-    );
-  }
-
-  getStarshipsByName() {
-    if (this.searchInput.length === 0) {
-      this.getStarships();
-    } else {
+  public async getStarships(page = 1): Promise<void> {
+    try {
       this.loaderService.show();
-      this.starshipService.getStarshipsByName(this.searchInput)
-      .subscribe(
-        starships => {
-          this.starships = starships;
-          this.loaderService.hide();
-        }, error => {
-          console.error(error);
-          this.loaderService.hide();
-        }
-      )
+      const params = { page, search: this.searchInput };
+      const { count, results } = await this.starshipService.getStartships(params).toPromise();
+      this.starships = results;
+      this.count = count;
+    } catch(error) {
+      console.error(error);
+    } finally {
+      this.loaderService.hide();
     }
   }
 
-  getStarshipId(urlString: string) {
+  public getStarshipId(urlString: string): string {
     return urlString.split('/')[5];
   }
 
-  prevPage() {
-    if (this.currentPage - 1 > 0) {
-      this.currentPage--;
-      this.getStarships();
-    }
+  public ngOnInit(): void {
+    this.getStarships(1);
   }
 
-  nextPage() {
-    if (this.currentPage + 1 < 10) {
-      this.currentPage++;
-      this.getStarships();
-    }
+  public toggleSortStarships(): void {
+    this.starships = this.isSortedByAlphabet
+      ? this.sortStarshipsReverseAlphabetical(this.starships)
+      : this.sortStarshipsByAlphabet(this.starships)
+    this.isSortedByAlphabet = !this.isSortedByAlphabet;
   }
 
-  ngOnInit() {
-    this.getStarships();
+  private sortStarshipsByAlphabet(starships: Starship[]): Starship[] {
+    return starships.sort((a, b) => a.name < b.name ? -1 : 1);
+  }
+
+  private sortStarshipsReverseAlphabetical(starships: Starship[]): Starship[] {
+    return starships.sort((a, b) => a.name < b.name ? 1 : -1);
   }
 
 }
