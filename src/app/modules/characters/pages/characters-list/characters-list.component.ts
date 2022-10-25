@@ -56,7 +56,7 @@ export class CharactersListComponent implements OnInit {
     return urlString.split('/')[5];
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.getCharacters();
   }
 

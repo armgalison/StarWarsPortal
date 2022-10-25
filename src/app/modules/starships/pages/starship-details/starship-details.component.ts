@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { Starship } from 'src/app/core/models/starship';
-
-import { CharacterService } from 'src/app/core/services/character.service';
-import { StarshipService } from 'src/app/core/services/starship.service';
-import { LoaderService } from 'src/app/core/services/loader.service';
+import { Character } from '@models/character';
+import { Starship } from '@models/starship';
+import { CharacterService } from '@services/character.service';
+import { LoaderService } from '@services/loader.service';
+import { StarshipService } from '@services/starship.service';
+import { from, Observable } from 'rxjs';
+import { map, mergeMap, tap, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-starship-details',
@@ -14,8 +15,8 @@ import { LoaderService } from 'src/app/core/services/loader.service';
 })
 export class StarshipDetailsComponent implements OnInit {
 
-  id: string;
-  starship: Starship;
+  public id: string;
+  public starship: Starship;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -24,42 +25,35 @@ export class StarshipDetailsComponent implements OnInit {
     private loaderService: LoaderService
   ) { }
 
-  getPilotIdFromUrl(url: string) {
+  public ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.getStarshipWithPilots(this.id);
+  }
+
+  private getPilotIdFromUrl(url: string): string {
     return url.split('/')[5];
   }
 
-  async getPilotsFromUrls(urls: string[]) {
-    const promiseArray = [];
-    urls.forEach(url => {
-      promiseArray.push(this.characterService.getCharacterById(this.getPilotIdFromUrl(url)).toPromise());
+  private getPilotsFromUrls(urls: string[] = []): Observable<Character[]> {
+    return from(urls).pipe(
+      map(url => this.getPilotIdFromUrl(url)),
+      mergeMap(id => this.characterService.getCharacterById(id)),
+      toArray(),
+    );
+  }
+
+  private combinePilots(starship: Starship): Observable<Starship> {
+    return this.getPilotsFromUrls(<string[]>starship.pilots).pipe(map(pilots => ({ ...starship, pilots })));
+  }
+
+  private getStarshipWithPilots(id: string): void {
+    this.starshipService.getStarshipById(id).pipe(
+      tap(() => this.loaderService.show()),
+      mergeMap(starship => this.combinePilots(starship))
+    ).subscribe({
+      next: (starship) => this.starship = starship,
+      error: (error) => console.error(error),
+      complete: () => this.loaderService.hide()
     });
-    return await Promise.all(promiseArray);
   }
-
-  async getStarshipsWithPilots(id: string) {
-    let starship: Starship;
-    starship = await this.starshipService.getStarshipById(id).toPromise();
-    starship.pilots = await this.getPilotsFromUrls(starship.pilots);
-    return starship;
-  }
-
-  getStarship(id: string) {
-    this.loaderService.show();
-    this.getStarshipsWithPilots(id)
-    .then(starship => {
-      console.log(starship);
-      this.starship = starship;
-      this.loaderService.hide();
-    })
-    .catch(error => {
-      console.error(error);
-      this.loaderService.hide();
-    })
-  }
-
-  ngOnInit() {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getStarship(this.id);
-  }
-
 }

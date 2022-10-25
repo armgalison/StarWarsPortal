@@ -1,3 +1,5 @@
+import { Character } from './character';
+
 export interface Starship {
     name: string;
     model: string;
@@ -12,7 +14,7 @@ export interface Starship {
     hyperdrive_rating: number;
     MGLT: number;
     starship_class: string;
-    pilots: string[];
+    pilots: string[] | Character[];
     films: string[];
     url: string;
 }

@@ -51,7 +51,7 @@ export class CharacterDetailsComponent implements OnInit {
     this.getCharacter(this.id);
   }
 
-  public openSpecieModal(specie: Specie) {
+  public openSpecieModal(specie: Specie): void {
     this.specieModal.open(specie);
   }
 
@@ -61,7 +61,7 @@ export class CharacterDetailsComponent implements OnInit {
     return Promise.all(promiseArray);
   }
 
-  private getSpecieIdFromUrl(url: string) {
+  private getSpecieIdFromUrl(url: string): string {
     return url.split('/')[5];
   }
 
