@@ -27,6 +27,10 @@ export class StarshipDetailsComponent implements OnInit {
     this.loadStarship();
   }
 
+  public getPilotIdFromUrl(url: string): string {
+    return url.split('/')[5];
+  }
+
   private loadStarship(): void {
     this.loaderService.show();
     this.starshipService.getStarshipWithPilotsById(this.id).subscribe({
