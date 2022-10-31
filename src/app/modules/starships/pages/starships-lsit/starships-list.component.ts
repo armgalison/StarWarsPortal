@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Starship } from '@models/starship';
 import { LoaderService } from '@services/loader.service';
 import { StarshipService } from '@services/starship.service';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-starships-list',
@@ -18,7 +19,8 @@ export class StarshipsListComponent implements OnInit {
 
   constructor(
     private starshipService: StarshipService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) { }
 
   public async getStarships(page = 1): Promise<void> {
@@ -29,6 +31,7 @@ export class StarshipsListComponent implements OnInit {
       this.starships = results;
       this.count = count;
     } catch(error) {
+      this.toastService.danger(`Unable to load starships, please try again.`);
       console.error(error);
     } finally {
       this.loaderService.hide();

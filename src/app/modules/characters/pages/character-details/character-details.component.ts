@@ -7,8 +7,9 @@ import { Specie } from '@models/specie';
 import { CharacterService } from '@services/character.service';
 import { LoaderService } from '@services/loader.service';
 import { SpecieService } from '@services/specie.service';
-
+import { ToastService } from '@services/toast.service';
 import { SpecieModalComponent } from '../../components/specie-modal/specie-modal.component';
+
 
 @Component({
   selector: 'app-character-details',
@@ -26,7 +27,8 @@ export class CharacterDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private characterService: CharacterService,
     private specieService: SpecieService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) { }
 
   public async getCharacterWithSpecies(id: string): Promise<Character> {
@@ -41,6 +43,7 @@ export class CharacterDetailsComponent implements OnInit {
       this.character = await this.getCharacterWithSpecies(id);
     } catch (error) {
       console.error(error);
+      this.toastService.danger(`Unable to load character, please try again.`);
     } finally {
       this.loaderService.hide();
     }

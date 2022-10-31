@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Character } from '@models/character';
 import { Starship } from '@models/starship';
-import { CharacterService } from '@services/character.service';
 import { LoaderService } from '@services/loader.service';
 import { StarshipService } from '@services/starship.service';
-import { from, Observable } from 'rxjs';
-import { map, mergeMap, tap, toArray } from 'rxjs/operators';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-starship-details',
@@ -20,40 +17,28 @@ export class StarshipDetailsComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private characterService: CharacterService,
     private starshipService: StarshipService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private toastService: ToastService
   ) { }
 
   public ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getStarshipWithPilots(this.id);
+    this.loadStarship();
   }
 
-  private getPilotIdFromUrl(url: string): string {
-    return url.split('/')[5];
-  }
-
-  private getPilotsFromUrls(urls: string[] = []): Observable<Character[]> {
-    return from(urls).pipe(
-      map(url => this.getPilotIdFromUrl(url)),
-      mergeMap(id => this.characterService.getCharacterById(id)),
-      toArray(),
-    );
-  }
-
-  private combinePilots(starship: Starship): Observable<Starship> {
-    return this.getPilotsFromUrls(<string[]>starship.pilots).pipe(map(pilots => ({ ...starship, pilots })));
-  }
-
-  private getStarshipWithPilots(id: string): void {
-    this.starshipService.getStarshipById(id).pipe(
-      tap(() => this.loaderService.show()),
-      mergeMap(starship => this.combinePilots(starship))
-    ).subscribe({
-      next: (starship) => this.starship = starship,
-      error: (error) => console.error(error),
-      complete: () => this.loaderService.hide()
+  private loadStarship(): void {
+    this.loaderService.show();
+    this.starshipService.getStarshipWithPilotsById(this.id).subscribe({
+      next: (starship) => {
+        this.starship = starship;
+        this.loaderService.hide();
+      },
+      error: (error) => {
+        console.error(error);
+        this.toastService.danger(`Unable to load starship, please try again.`);
+        this.loaderService.hide()
+      }
     });
   }
 }

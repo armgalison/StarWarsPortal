@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Character } from '@models/character';
 import { CharacterService } from '@services/character.service';
 import { LoaderService } from '@services/loader.service';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-characters-list',
@@ -29,6 +30,7 @@ export class CharactersListComponent implements OnInit {
   constructor(
     private characterService: CharacterService,
     private loaderService: LoaderService,
+    private toastService: ToastService
   ) { }
 
   public toggleSortCharacters(): void {
@@ -47,6 +49,7 @@ export class CharactersListComponent implements OnInit {
       this.characters = results;
     } catch (error) {
       console.error(error);
+      this.toastService.danger(`Unable to load characters, please try again.`);
     } finally {
       this.loaderService.hide();
     }

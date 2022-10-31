@@ -1,0 +1,16 @@
+<ng-container *ngFor="let toast of toastService.toasts">
+  <ngb-toast
+    [autohide]="true"
+    [class]="toast.classname"
+    [delay]="toast.delay || 5000"
+    (hiddden)="toastService.remove(toast)">
+    <div class="d-flex justify-content-between align-items-center p-2">
+      <div class="content">{{ toast.body }}</div>
+      <button type="button"
+        class="btn-close btn-close-white"
+        aria-label="Close"
+        (click)="toastService.remove(toast)">
+      </button>
+    </div>
+  </ngb-toast>
+</ng-container>

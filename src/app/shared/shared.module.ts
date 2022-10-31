@@ -1,17 +1,19 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     NgbModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   exports: [
     NgbModule,
