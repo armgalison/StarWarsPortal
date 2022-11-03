@@ -1,15 +1,15 @@
+import { loadCharacter } from '@actions/characters.action';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Character } from '@models/character';
 import { Specie } from '@models/specie';
+import { Store } from '@ngrx/store';
 
 import { CharacterService } from '@services/character.service';
-import { LoaderService } from '@services/loader.service';
 import { SpecieService } from '@services/specie.service';
-import { ToastService } from '@services/toast.service';
+import { Observable } from 'rxjs';
 import { SpecieModalComponent } from '../../components/specie-modal/specie-modal.component';
-
 
 @Component({
   selector: 'app-character-details',
@@ -20,15 +20,13 @@ export class CharacterDetailsComponent implements OnInit {
 
   @ViewChild('specieModal') public specieModal: SpecieModalComponent;
 
-  public character: Character;
-  public id: string;
+  public character$: Observable<Character> = this.store.select((state) => state.character);
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private characterService: CharacterService,
     private specieService: SpecieService,
-    private loaderService: LoaderService,
-    private toastService: ToastService
+    private store: Store<{ character: Character }>,
   ) { }
 
   public async getCharacterWithSpecies(id: string): Promise<Character> {
@@ -37,21 +35,9 @@ export class CharacterDetailsComponent implements OnInit {
     return { ...character, species };
   }
 
-  public async getCharacter(id: string): Promise<void> {
-    try {
-      this.loaderService.show();
-      this.character = await this.getCharacterWithSpecies(id);
-    } catch (error) {
-      console.error(error);
-      this.toastService.danger(`Unable to load character, please try again.`);
-    } finally {
-      this.loaderService.hide();
-    }
-  }
-
   public ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.getCharacter(this.id);
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.store.dispatch({ type: loadCharacter.type, payload: id });
   }
 
   public openSpecieModal(specie: Specie): void {
