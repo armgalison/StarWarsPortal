@@ -1,9 +1,9 @@
+import { loadCharacters } from '@actions/characters.action';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Character } from '@models/character';
-import { CharacterService } from '@services/character.service';
-import { LoaderService } from '@services/loader.service';
-import { ToastService } from '@services/toast.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-characters-list',
@@ -21,38 +21,19 @@ import { ToastService } from '@services/toast.service';
 })
 export class CharactersListComponent implements OnInit {
 
-  public count: number;
-  public characters: Character[];
-  public currentPage: number = 1;
+  public characters$: Observable<Character[]> = this.store.select((state) => state.characters.characters);
+  public count$: Observable<number> = this.store.select((state) => state.characters.charactersCount);
+  public currentPage$: Observable<number> = this.store.select((state) => state.characters.charactersCurrentPage);;
+
   public isSortedByAlphabet: boolean = true;
   public searchInput: string = '';
 
   constructor(
-    private characterService: CharacterService,
-    private loaderService: LoaderService,
-    private toastService: ToastService
+    private store: Store<{ characters: { characters: Character[], charactersCount: number, charactersCurrentPage: number } }>,
   ) { }
 
   public toggleSortCharacters(): void {
-    this.characters = this.isSortedByAlphabet
-      ? this.sortCharactersReverseAlphabetical(this.characters)
-      : this.sortCharactersByAlphabet(this.characters);
     this.isSortedByAlphabet = !this.isSortedByAlphabet;
-  }
-
-  public async getCharacters(page = 1): Promise<void> {
-    try {
-      this.loaderService.show();
-      const { count, results } = await this.characterService.getCharacters({ page, search: this.searchInput }).toPromise();
-      this.currentPage = page;
-      this.count = count;
-      this.characters = results;
-    } catch (error) {
-      console.error(error);
-      this.toastService.danger(`Unable to load characters, please try again.`);
-    } finally {
-      this.loaderService.hide();
-    }
   }
 
   public getCharacterId(urlString: string): string {
@@ -60,7 +41,7 @@ export class CharactersListComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getCharacters();
+    this.store.dispatch({ type: '[Characters] Load Characters', payload: { page: 1, search: '' } });
   }
 
   private sortCharactersByAlphabet(characters: Character[]): Character[] {
@@ -69,6 +50,10 @@ export class CharactersListComponent implements OnInit {
 
   private sortCharactersReverseAlphabetical(characters: Character[]): Character[] {
     return characters.sort((a, b) => a.name < b.name ? 1 : -1);
+  }
+
+  public setPage(page: number = 1): void {
+    this.store.dispatch({ type: loadCharacters.type, payload: { page, search: this.searchInput } });
   }
 
 }

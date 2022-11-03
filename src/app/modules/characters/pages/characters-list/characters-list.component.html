@@ -3,9 +3,9 @@
     <div class="col-12">
       <label for="searchCharacter">Search by name:</label>
       <div class="input-group">
-        <input type="text" id="searchCharacter" class="form-control" [(ngModel)]="searchInput" (keyup.enter)="getCharacters()">
+        <input type="text" id="searchCharacter" class="form-control" [(ngModel)]="searchInput" (keyup.enter)="setPage()">
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" (click)="getCharacters()">Search</button>
+          <button class="btn btn-outline-secondary" (click)="setPage()">Search</button>
         </div>
       </div>
     </div>
@@ -21,13 +21,17 @@
   <div class="row padding-top">
     <div class="col-12">
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let char of characters" @items>
-          {{ char.name }}
-          <button class="btn btn-outline-secondary right-float" [routerLink]="['/characters', getCharacterId(char.url)]">
-            Details
-          </button>
-        </li>
-        <li class="list-group-item" *ngIf="characters && characters.length == 0">Character not found!</li>
+        <ng-container *ngIf="characters$ | async as characters; else emptyList">
+          <li class="list-group-item" *ngFor="let char of characters" @items>
+            {{ char.name }}
+            <button class="btn btn-outline-secondary right-float" [routerLink]="['/characters', getCharacterId(char.url)]">
+              Details
+            </button>
+          </li>
+        </ng-container>
+        <ng-template #emptyList>
+          <li class="list-group-item">Character not found!</li>
+        </ng-template>
       </ul>
     </div>
   </div>
@@ -35,12 +39,12 @@
     <div class="col-12 d-flex justify-content-center">
       <ngb-pagination
         [boundaryLinks]="true"
-        [collectionSize]="count"
+        [collectionSize]="count$ | async"
         [maxSize]="5"
         [rotate]="true"
         [ellipses]="false"
-        [page]="currentPage"
-        (pageChange)="getCharacters($event)">
+        [page]="currentPage$ | async"
+        (pageChange)="setPage($event)">
       </ngb-pagination>
     </div>
   </div>

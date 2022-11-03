@@ -1,5 +1,5 @@
 <div class="character-details">
-  <div class="container" *ngIf="character">
+  <div class="container" *ngIf="character$ | async as character">
     <div class="row">
       <div class="col-12 padding-top center-align">
         <h2>{{ character.name }}</h2>
